@@ -17,13 +17,9 @@ def facebookpagepage_random_trainer(args, iteration, x, y, model, device, schedu
         optimizer.step()
         scheduler.step()
     
-    elif flow_type == "val":
+    else:
         output = model(x).squeeze()
         loss = criterion(output, y)
         return model, loss.item(), output, y
-    
-    elif flow_type == "test":
-        output = model(x).squeeze()
-        return output, y
 
-    return model, loss.item()
+    return model, loss.item(), output, y
