@@ -88,7 +88,7 @@ for epoch in range(1, args.epochs+1):
 
         iteration += 1
 
-        model, iter_loss = get_trainer(args = args,
+        model, iter_loss, _, _ = get_trainer(args = args,
                                        iteration = iteration,
                                        x = train_x,
                                        static = None,
