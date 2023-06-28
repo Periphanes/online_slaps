@@ -16,11 +16,14 @@ class basic_Dataset(torch.utils.data.Dataset):
         return len(self._data_list)
     
     def __getitem__(self, index):
-        return len(self._data_list[index])
+        return self._data_list[index]
 
 class facebook_pagepage_training_Dataset(torch.utils.data.Dataset):
     def __init__(self, args, data, data_type="dataset"):
         self._data_list = data
 
     def __len__(self):
-        return 
+        return self._data_list[1].shape[0]
+    
+    def __getitem__(self, index):
+        return (self._data_list[0][index, :], self._data_list[1][index])
