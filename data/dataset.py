@@ -1,0 +1,26 @@
+import os
+import random
+
+import torch
+
+import pickle
+from tqdm import tqdm
+
+class basic_Dataset(torch.utils.data.Dataset):
+    def __init__(self, args, data, data_type="dataset"):
+        self._data_list = []
+
+        self._data_list = data
+    
+    def __len__(self):
+        return len(self._data_list)
+    
+    def __getitem__(self, index):
+        return len(self._data_list[index])
+
+class facebook_pagepage_training_Dataset(torch.utils.data.Dataset):
+    def __init__(self, args, data, data_type="dataset"):
+        self._data_list = data
+
+    def __len__(self):
+        return 
