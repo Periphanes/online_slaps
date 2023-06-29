@@ -5,6 +5,7 @@ import torch_geometric
 
 from torch_geometric.datasets import JODIEDataset
 from torch_geometric.datasets import FacebookPagePage
+from torch_geometric.datasets import Reddit
 
 # from control.config import args
 
@@ -44,3 +45,29 @@ def wrangle_facebookpagepage(args):
     args.class_count = 4
 
     return train_data_list, val_data_list, test_data_list
+
+def wrangle_reddit(args):
+    fb = Reddit(root='./datasets/reddit').to_datapipe()
+    fb = fb.batch_graphs(batch_size = 1)
+
+    for batch in fb:
+        graph = batch[0]
+    
+    nodes = graph["x"]
+    labels = torch.unsqueeze(graph["y"], 1)
+
+    train_mask = graph["train_mask"]
+    val_mask = graph["val_mask"]
+    test_mask = graph["test_mask"]
+
+    node_feature_count = nodes.shape[1]
+
+    print(torch.sum(nodes[0]))
+
+    # train_y = torch.masked_select(labels, train_mask)
+    # val_y = torch.masked_select(labels, val_mask)
+    # test_y = torch.masked_select(labels, test_mask)
+
+    # enlarged_train_mask = train_mask.expand(-1, node_feature_count)
+
+    return nodes, labels, train_mask, val_mask, test_mask
