@@ -16,6 +16,8 @@ parser.add_argument('--lr_init', type=float, default=1e-4)
 parser.add_argument('--val-epoch', type=int, default=10)
 
 parser.add_argument('--graph-sample-layers', type=int, default=2)
+parser.add_argument('--input-type', type=str, choices=["features", "sampling"], default="features")
+parser.add_argument('--knn-k', type=int, default=15)
 
 args = parser.parse_args()
 args.dir_root = os.getcwd()

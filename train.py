@@ -9,14 +9,22 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 
+
 from tqdm import tqdm
 
 from control.config import args
 from models import get_model
 from trainer import get_trainer
 from data.data_preprocess import get_data_loader
+from data.data_wrangling import *
+from utils.knn_graph.naive_knn import naive_knn_gen
+from utils.graph_sampling.neighborhood_sample import neighborhood_sample
+
+import glob_var
 
 from sklearn.metrics import classification_report
+
+glob_var.init()
 
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
 
@@ -36,8 +44,23 @@ else:
 print("Device Used : ", device)
 args.device = device
 
+# nodes, labels, trm, vam, tem = wrangle_reddit(args) 
+# edges = naive_knn_gen(args, 10, nodes, labels, trm, vam, tem)
+
+# tdl, vdl, tedl = wrangle_facebookpagepage(args)
+# nodes, labels = tdl
+
+# edges = naive_knn_gen(args, 10, nodes, labels, test_gen=True)
+
+# neighborhood_sample(args, torch.randint(1,20000, (2,)), nodes, edges, labels)
+
+# exit(1)
+
 if args.dataset == "facebookpagepage":
-    args.trainer = "facebookpagepage_random"
+    if args.input_type == "features":
+        args.trainer = "facebookpagepage_random"
+    elif args.input_type == "sampling":
+        args.trainer = "facebookpagepage_sampling"
 else:
     raise NotImplementedError("Trainer Not Defined Yet")
 
@@ -72,19 +95,34 @@ for epoch in range(1, args.epochs+1):
 
     training_loss = []
 
+    input_1 = ["facebookpagepage_random"]
+    input_2 = ["facebookpagepage_sampling"]
+    input_3 = []
+
     for train_batch in tqdm(train_loader):
-        if args.trainer == "facebookpagepage_random":
+        if any(args.trainer in x for x in input_1):
             train_x, train_y = train_batch
-            train_x = train_x.to(device)
+            try:
+                train_x = train_x.to(device)
+            except:
+                train_x = [x.to(device) for x in train_x]
+        elif any(args.trainer in x for x in input_2):
+            train_x, train_y = train_batch
+            try:
+                train_x = (train_x[0].to(device), train_x[1].to(device))
+            except:            
+                train_x = [(x[0].to(device), x[1].to(device)) for x in train_x]
+        elif any(args.trainer in x for x in input_3):
+            train_x, train_y = train_batch
+            try:
+                train_x = (train_x[0].to(device), train_x[1].to(device), train_x[2].to(device), train_x[3].to(device))
+            except:
+                train_x = [(x[0].to(device), x[1].to(device), x[2].to(device)) for x in train_x]
+        
+        try:
             train_y = train_y.to(device)
-        elif args.trainer == "two inputs":
-            train_x, train_y = train_batch
-            train_x = (train_x[0].to(device), train_x[1].to(device))
-            train_y = train_y.to(device)            
-        elif args.trainer == "three inputs":
-            train_x, train_y = train_batch
-            train_x = (train_x[0].to(device), train_x[1].to(device), train_x[2].to(device), train_x[3].to(device))
-            train_y = train_y.to(device)
+        except:
+            train_y = [y.to(device) for y in train_y]
 
         iteration += 1
 

@@ -5,6 +5,9 @@ import torch
 import numpy as np
 
 from control.config import args
+from utils.graph_sampling.neighborhood_sample import neighborhood_sample, neighborhood_sample_single
+
+import glob_var
 
 def collate_basic(train_data):
     X_batch = []
@@ -35,5 +38,20 @@ def collate_fbpp_train_random(train_data):
     
     X = torch.stack(X_batch)
     y = torch.tensor(y_batch)
+
+    return X, y
+
+def collate_fbpp_train_sampling(train_data):
+
+    X = []
+    y = []
+
+    for data_point in train_data:
+        graph_node, graph_edge = neighborhood_sample_single(args, data_point[0][1], glob_var.train_data_list[0], glob_var.train_knn_edges,
+                                                  glob_var.train_data_list[1], masked=False)
+        X.append((graph_node, graph_edge))
+        y.append(data_point[1])
+    
+    y = torch.tensor(y)
 
     return X, y
