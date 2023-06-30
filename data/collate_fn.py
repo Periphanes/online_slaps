@@ -74,3 +74,9 @@ def collate_fbpp_test_sampling(test_data):
         graph_node, graph_edge = neighborhood_project_single(args, data_point[0], glob_var.train_data_list[0], glob_var.train_knn_edges,
                                                              data_point[1], masked=False)
         
+        X.append((graph_node, graph_edge))
+        y.append(data_point[1])
+    
+    y = torch.tensor(y)
+
+    return X, y
