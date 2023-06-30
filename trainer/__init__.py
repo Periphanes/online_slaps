@@ -7,6 +7,8 @@ def get_trainer(args, iteration, x, static, y, model, device, scheduler, optimiz
         pass
     if args.trainer == "facebookpagepage_random":
         model, iter_loss, pred, true = facebookpagepage_random_trainer(args, iteration, x, y, model, device, scheduler, optimizer, criterion, flow_type)
+    elif args.trainer == "facebookpagepage_sampling":
+        model, iter_loss, pred, true = facebookpagepage_sampling_trainer(args, iteration, x, y, model, device, scheduler, optimizer, criterion, flow_type)
     else:
         print("Selected Trainer is not Prepared Yet")
         raise NotImplementedError
