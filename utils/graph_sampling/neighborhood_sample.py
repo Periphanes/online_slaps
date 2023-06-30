@@ -91,13 +91,22 @@ def neighborhood_sample_single(args, node_index, nodes, edges, labels, masked=Tr
         outliers = new_outliers
     
     for node in graph_indexes:
-        if node in outliers:
-            continue
         edge_list = edges[node].to('cpu')
-        edge_list.apply_(lambda x: index_dict[x])
-        graph_edges.append(edge_list.to(args.device))
+        # edge_list.apply_(lambda x: index_dict[x])
+
+        new_edge_list = []
+
+        for edge in edge_list:
+            if edge.item() in index_dict:
+                new_edge_list.append(index_dict[edge.item()])
+
+        graph_edges.append(torch.tensor(new_edge_list).to(args.device))
 
     graph_nodes = torch.stack(graph_nodes)
-    graph_edges = torch.stack(graph_edges)
+
+    # print(graph_nodes.shape)
+    # print(graph_edges.shape)
+
+    # exit(1)
 
     return graph_nodes, graph_edges

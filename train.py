@@ -110,8 +110,11 @@ for epoch in range(1, args.epochs+1):
             train_x, train_y = train_batch
             try:
                 train_x = (train_x[0].to(device), train_x[1].to(device))
-            except:            
-                train_x = [(x[0].to(device), x[1].to(device)) for x in train_x]
+            except:
+                try:
+                    train_x = [(x[0].to(device), x[1].to(device)) for x in train_x]
+                except:
+                    train_x = [(x[0].to(device), x[1]) for x in train_x]
         elif any(args.trainer in x for x in input_3):
             train_x, train_y = train_batch
             try:
