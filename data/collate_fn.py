@@ -7,6 +7,8 @@ import numpy as np
 from control.config import args
 from utils.graph_sampling.neighborhood_sample import neighborhood_sample, neighborhood_sample_single
 
+import random
+
 import glob_var
 
 def collate_basic(train_data):
@@ -46,7 +48,16 @@ def collate_fbpp_train_sampling(train_data):
     X = []
     y = []
 
+    i = 0
+
     for data_point in train_data:
+
+        # Sample Approximately from the Training Batch
+        if random.randint(0, 100) < (100 - args.sage_sample_percent) and i > 1:
+            continue
+
+        i += 1
+
         graph_node, graph_edge = neighborhood_sample_single(args, data_point[0][1], glob_var.train_data_list[0], glob_var.train_knn_edges,
                                                   glob_var.train_data_list[1], masked=False)
         X.append((graph_node, graph_edge))

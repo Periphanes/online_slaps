@@ -58,12 +58,7 @@ def neighborhood_sample_single(args, node_index, nodes, edges, labels, masked=Tr
                         val_mask=None, test_mask=None, flow_type="train", edge_type="adj"):
     graph_sample_layers = args.graph_sample_layers
 
-    node_batch = []
-    edge_batch = []
-
-
     index_count = 1
-    # node_index = node_index.item()
     index_dict = {node_index : 0}
 
     graph_nodes = [nodes[node_index]]
