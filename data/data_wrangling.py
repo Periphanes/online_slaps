@@ -62,7 +62,7 @@ def wrangle_reddit(args):
 
     node_feature_count = nodes.shape[1]
 
-    print(torch.sum(nodes[0]))
+    # print(torch.sum(nodes[0]))
 
     # train_y = torch.masked_select(labels, train_mask)
     # val_y = torch.masked_select(labels, val_mask)

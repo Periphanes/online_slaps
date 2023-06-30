@@ -21,4 +21,3 @@ class BASELINE_MLP(nn.Module):
         out = self.output(em2)
 
         return self.softmax(out)
-    

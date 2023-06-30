@@ -15,5 +15,7 @@ parser.add_argument('--model', type=str, default="baseline_mlp")
 parser.add_argument('--lr_init', type=float, default=1e-4)
 parser.add_argument('--val-epoch', type=int, default=10)
 
+parser.add_argument('--graph-sample-layers', type=int, default=2)
+
 args = parser.parse_args()
 args.dir_root = os.getcwd()
