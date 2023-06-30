@@ -1,7 +1,9 @@
 import torch
 import numpy as np
 
-def naive_knn_gen(args, k, nodes : torch.Tensor, labels : torch.Tensor, train_mask, val_mask, test_mask, test_gen = False):
+from tqdm import tqdm
+
+def naive_knn_gen(args, k, nodes : torch.Tensor, labels : torch.Tensor, train_mask=None, val_mask=None, test_mask=None, test_gen = False):
     """
     Naive kNN Graph Generation Function -> O(n^2) complexity via naive similarity comparisons
     No optimizations applied
@@ -20,10 +22,19 @@ def naive_knn_gen(args, k, nodes : torch.Tensor, labels : torch.Tensor, train_ma
         val_mask (torch.Tensor): Mask for Validation Data Nodes
         test_mask (torch.Tensor): Mask for Testing Data Nodes
     """
-    train_nodes = torch.nonzero(train_mask).view(-1)
+
+    print("Initializing kNN Graph Construction...")
+
+    if train_mask != None:
+        train_nodes = torch.nonzero(train_mask).view(-1)
+    else:
+        train_nodes = torch.LongTensor([i for i in range(nodes.shape[0])])
+    
     edge_list = []
 
-    for i in range(train_nodes.shape[0]):
+    nodes = nodes.to(args.device)
+
+    for i in tqdm(range(train_nodes.shape[0])):
         cur_node = train_nodes[i].item()
         cur_embd = nodes[cur_node, :].unsqueeze(0)
 
@@ -39,5 +50,7 @@ def naive_knn_gen(args, k, nodes : torch.Tensor, labels : torch.Tensor, train_ma
         edge_list.append(top_sim_indices)
     
     edges = torch.stack(edge_list)
+
+    print("kNN Graph with", train_nodes.shape[0], "nodes and", train_nodes.shape[0] * k, "edges constructed!...")
 
     return edges
