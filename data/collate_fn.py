@@ -6,6 +6,7 @@ import numpy as np
 
 from control.config import args
 from utils.graph_sampling.neighborhood_sample import neighborhood_sample, neighborhood_sample_single
+from utils.graph_sampling.neighborhood_project import neighborhood_project_single
 
 import random
 
@@ -44,10 +45,8 @@ def collate_fbpp_train_random(train_data):
     return X, y
 
 def collate_fbpp_train_sampling(train_data):
-
     X = []
     y = []
-
     i = 0
 
     for data_point in train_data:
@@ -66,3 +65,12 @@ def collate_fbpp_train_sampling(train_data):
     y = torch.tensor(y)
 
     return X, y
+
+def collate_fbpp_test_sampling(test_data):
+    X = []
+    y = []
+    
+    for data_point in test_data:
+        graph_node, graph_edge = neighborhood_project_single(args, data_point[0], glob_var.train_data_list[0], glob_var.train_knn_edges,
+                                                             data_point[1], masked=False)
+        
