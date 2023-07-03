@@ -69,6 +69,9 @@ train_loader, val_loader, test_loader = get_data_loader(args)
 model = get_model(args)
 model = model(args).to(device)
 
+pytorch_total_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
+print("Model Parameter Count :", pytorch_total_params)
+
 criterion = nn.CrossEntropyLoss()
 
 optimizer = optim.Adam(model.parameters(), lr=args.lr_init)
