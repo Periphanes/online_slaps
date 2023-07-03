@@ -152,20 +152,38 @@ for epoch in range(1, args.epochs+1):
         pred_batches = []
         true_batches = []
 
+        input_1 = ["facebookpagepage_random"]
+        input_2 = ["facebookpagepage_sampling"]
+        input_3 = []
+
         with torch.no_grad():
             for val_batch in val_loader:
-                if args.trainer == "facebookpagepage_random":
+                if any(args.trainer in x for x in input_1):
                     val_x, val_y = val_batch
-                    val_x = val_x.to(device)
-                    val_y = val_y.to(device)
-                elif args.trainer == "two inputs":
+                    try:
+                        val_x = val_x.to(device)
+                    except:
+                        val_x = [x.to(device) for x in val_x]
+                elif any(args.trainer in x for x in input_2):
                     val_x, val_y = val_batch
-                    val_x = (val_x[0].to(device), val_x[1].to(device))
-                    val_y = val_y.to(device)
-                elif args.trainer == "three inputs":
+                    try:
+                        val_x = (val_x[0].to(device), val_x[1].to(device))
+                    except:
+                        try:
+                            val_x = [(x[0].to(device), x[1].to(device)) for x in val_x]
+                        except:
+                            val_x = [(x[0].to(device), x[1]) for x in val_x]
+                elif any(args.trainer in x for x in input_3):
                     val_x, val_y = val_batch
-                    val_x = (val_x[0].to(device), val_x[1].to(device), val_x[2].to(device), val_x[3].to(device))
+                    try:
+                        val_x = (val_x[0].to(device), val_x[1].to(device), val_x[2].to(device), val_x[3].to(device))
+                    except:
+                        val_x = [(x[0].to(device), x[1].to(device), x[2].to(device)) for x in val_x]
+                
+                try:
                     val_y = val_y.to(device)
+                except:
+                    val_y = [y.to(device) for y in val_y]
 
                 model, val_loss, pred, true = get_trainer(args = args,
                                             iteration = iteration,
