@@ -46,7 +46,7 @@ def get_data_loader(args):
         test_loader     = DataLoader(test_data, batch_size=args.batch_size, drop_last=True, collate_fn=collate_fbpp_train_random)
     elif args.trainer == "facebookpagepage_sampling":
         train_loader    = DataLoader(train_data, batch_size=args.batch_size, drop_last=True, collate_fn=collate_fbpp_train_sampling)
-        val_loader      = DataLoader(train_data, batch_size=args.batch_size, drop_last=True, collate_fn=collate_fbpp_test_sampling)
+        val_loader      = DataLoader(val_data, batch_size=args.batch_size, drop_last=True, collate_fn=collate_fbpp_test_sampling)
         test_loader     = None
     
     return train_loader, val_loader, test_loader
