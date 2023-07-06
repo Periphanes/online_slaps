@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 
-def facebookpagepage_random_trainer(args, iteration, x, y, model, device, scheduler, optimizer, criterion, flow_type=None):
+def facebookpagepage_features_trainer(args, iteration, x, y, model, device, scheduler, optimizer, criterion, flow_type=None):
     x = x.type(torch.FloatTensor).to(device)
     y = y.type(torch.LongTensor).to(device)
 

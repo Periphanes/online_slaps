@@ -13,8 +13,10 @@ import glob_var
 def get_data_loader(args):
     print("Initializing Data Loader and Datasets")
 
-    if args.trainer == "facebookpagepage_random" or "facebookpagepage_sampling":
+    if "facebookpagepage" in args.trainer:
         glob_var.train_data_list, glob_var.val_data_list, glob_var.test_data_list = wrangle_facebookpagepage(args)
+    elif "cora" in args.trainer:
+        glob_var.train_data_list, glob_var.val_data_list, glob_var.test_data_list = wrangle_cora(args)
 
     if "sampling" in args.trainer:
         glob_var.train_knn_edges = naive_knn_gen(args, args.knn_k, glob_var.train_data_list[0], glob_var.train_data_list[1], test_gen=True)
@@ -23,7 +25,7 @@ def get_data_loader(args):
         train_data      = basic_Dataset(args, data=glob_var.train_data_list, data_type="training dataset")
         val_data        = basic_Dataset(args, data=glob_var.val_data_list, data_type="validation dataset")
         test_data       = basic_Dataset(args, data=glob_var.test_data_list, data_type="testing dataset")
-    if args.trainer == "facebookpagepage_random":
+    if args.trainer == "facebookpagepage_features":
         train_data      = facebook_pagepage_training_Dataset(args, data=glob_var.train_data_list, data_type="training dataset")
         val_data        = facebook_pagepage_training_Dataset(args, data=glob_var.val_data_list, data_type="validation dataset")
         test_data       = facebook_pagepage_training_Dataset(args, data=glob_var.test_data_list, data_type="testing dataset")
@@ -40,7 +42,7 @@ def get_data_loader(args):
         train_loader    = DataLoader(train_data, batch_size=args.batch_size, drop_last=True, collate_fn=collate_basic)
         val_loader      = DataLoader(val_data, batch_size=args.batch_size, drop_last=True, collate_fn=collate_basic)
         test_loader     = DataLoader(test_data, batch_size=args.batch_size, drop_last=True, collate_fn=collate_basic)
-    elif args.trainer == "facebookpagepage_random":
+    elif args.trainer == "facebookpagepage_features":
         train_loader    = DataLoader(train_data, batch_size=args.batch_size, drop_last=True, collate_fn=collate_fbpp_train_random)
         val_loader      = DataLoader(val_data, batch_size=args.batch_size, drop_last=True, collate_fn=collate_fbpp_train_random)
         test_loader     = DataLoader(test_data, batch_size=args.batch_size, drop_last=True, collate_fn=collate_fbpp_train_random)

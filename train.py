@@ -58,9 +58,14 @@ args.device = device
 
 if args.dataset == "facebookpagepage":
     if args.input_type == "features":
-        args.trainer = "facebookpagepage_random"
+        args.trainer = "facebookpagepage_features"
     elif args.input_type == "sampling":
         args.trainer = "facebookpagepage_sampling"
+elif args.dataset == "cora":
+    if args.input_type == "features":
+        args.trainer = "cora_features"
+    elif args.input_type == "sampling":
+        args.trainer = "cora_sampling"
 else:
     raise NotImplementedError("Trainer Not Defined Yet")
 
@@ -98,7 +103,7 @@ for epoch in range(1, args.epochs+1):
 
     training_loss = []
 
-    input_1 = ["facebookpagepage_random"]
+    input_1 = ["facebookpagepage_features"]
     input_2 = ["facebookpagepage_sampling"]
     input_3 = []
 
@@ -155,7 +160,7 @@ for epoch in range(1, args.epochs+1):
         pred_batches = []
         true_batches = []
 
-        input_1 = ["facebookpagepage_random"]
+        input_1 = ["facebookpagepage_features"]
         input_2 = ["facebookpagepage_sampling"]
         input_3 = []
 

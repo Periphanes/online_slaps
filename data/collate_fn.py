@@ -29,7 +29,7 @@ def collate_basic(train_data):
 
 def collate_fbpp_train_random(train_data):
     '''
-    Collate Function for args.trainer == facebookpagepage_random
+    Collate Function for args.trainer == facebookpagepage_features
     Training Time Collate
     '''
     X_batch = []

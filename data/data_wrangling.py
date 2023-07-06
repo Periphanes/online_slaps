@@ -6,6 +6,7 @@ import torch_geometric
 from torch_geometric.datasets import JODIEDataset
 from torch_geometric.datasets import FacebookPagePage
 from torch_geometric.datasets import Reddit
+from torch_geometric.datasets import CoraFull
 
 # from control.config import args
 
@@ -71,3 +72,36 @@ def wrangle_reddit(args):
     # enlarged_train_mask = train_mask.expand(-1, node_feature_count)
 
     return nodes, labels, train_mask, val_mask, test_mask
+
+def wrangle_cora(args):
+    cr = CoraFull(root='./datasets/cora').to_datapipe()
+    cr = cr.batch_graphs(batch_size=1)
+
+    for batch in cr:
+        graph = batch[0]
+
+    nodes = graph["x"]
+    labels = torch.unsqueeze(graph["y"], 1)
+
+    concat = torch.cat((nodes, labels), 1)
+
+    random_indexes = torch.randperm(concat.shape[0])
+    shuffled_data = concat[random_indexes]
+
+    data_len = shuffled_data.shape[0]
+
+    X_data = shuffled_data[:, :128]
+    y_data = shuffled_data[:, 128]
+    
+    train_limit = int(data_len * 0.6)
+    val_limit = int(data_len * 0.8)
+    y_data = y_data.squeeze()
+
+    train_data_list = (X_data[:train_limit, :], y_data[:train_limit])
+    val_data_list = (X_data[train_limit:val_limit, :], y_data[train_limit:val_limit])
+    test_data_list = (X_data[val_limit:, :], y_data[val_limit:])
+
+    args.input_features = 128
+    args.class_count = 4
+
+    return train_data_list, val_data_list, test_data_list
