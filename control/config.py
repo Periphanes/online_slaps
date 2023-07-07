@@ -1,5 +1,6 @@
 import os
 import argparse
+import math
 
 parser = argparse.ArgumentParser()
 
@@ -19,6 +20,16 @@ parser.add_argument('--graph-sample-layers', type=int, default=2)
 parser.add_argument('--input-type', type=str, choices=["features", "sampling"], default="features")
 parser.add_argument('--knn-k', type=int, default=15)
 parser.add_argument('--sage-sample-percent', type=int, default=5)
+
+
+#SLAPS Model Configurations
+parser.add_argument('--slaps-mlp-layers', type=int, default=2)
+parser.add_argument('--slaps-mlp-out', type=int, default=40)
+parser.add_argument('--slaps-mlp-hidden', type=int, default=80)
+parser.add_argument('--slaps-sparse-graph', type=bool, default=True)
+parser.add_argument('--slaps-knn-metric', type=str, choices=['cosine', 'euclidean', 'haversine', 'l1', 'manhattan'], default='cosine')
+parser.add_argument('--slaps-sparse', type=bool, default=False)
+parser.add_argument('--slaps-mlp-epochs', type=int, default=100)
 
 args = parser.parse_args()
 args.dir_root = os.getcwd()

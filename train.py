@@ -24,6 +24,9 @@ import glob_var
 
 from sklearn.metrics import classification_report
 
+
+from models.slaps.graph_generators import MLP_GRAPH_GEN
+
 glob_var.init()
 
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
@@ -70,6 +73,8 @@ else:
     raise NotImplementedError("Trainer Not Defined Yet")
 
 train_loader, val_loader, test_loader = get_data_loader(args)
+
+test_mlp = MLP_GRAPH_GEN(args, glob_var.train_data_list)
 
 model = get_model(args)
 model = model(args).to(device)
