@@ -69,6 +69,11 @@ elif args.dataset == "cora":
         args.trainer = "cora_features"
     elif args.input_type == "sampling":
         args.trainer = "cora_sampling"
+elif args.dataset == "emaileucore":
+    if args.input_type == "features":
+        args.trainer = "email_features"
+    elif args.input_type == "sampling":
+        args.trainer = "email_sampling"
 else:
     raise NotImplementedError("Trainer Not Defined Yet")
 
