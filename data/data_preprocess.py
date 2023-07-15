@@ -17,6 +17,8 @@ def get_data_loader(args):
         glob_var.train_data_list, glob_var.val_data_list, glob_var.test_data_list = wrangle_facebookpagepage(args)
     elif "cora" in args.trainer:
         glob_var.train_data_list, glob_var.val_data_list, glob_var.test_data_list = wrangle_cora(args)
+    elif "email" in args.trainer:
+        glob_var.train_data_list, glob_var.val_data_list, glob_var.test_data_list = wrangle_emaileucore(args)
 
     if "sampling" in args.trainer:
         glob_var.train_knn_edges = naive_knn_gen(args, args.knn_k, glob_var.train_data_list[0], glob_var.train_data_list[1], test_gen=True)
