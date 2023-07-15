@@ -91,8 +91,8 @@ def wrangle_cora(args):
 
     data_len = shuffled_data.shape[0]
 
-    X_data = shuffled_data[:, :128]
-    y_data = shuffled_data[:, 128]
+    X_data = shuffled_data[:, :-1]
+    y_data = shuffled_data[:, -1]
     
     train_limit = int(data_len * 0.6)
     val_limit = int(data_len * 0.8)
@@ -102,8 +102,8 @@ def wrangle_cora(args):
     val_data_list = (X_data[train_limit:val_limit, :], y_data[train_limit:val_limit])
     test_data_list = (X_data[val_limit:, :], y_data[val_limit:])
 
-    args.input_features = 128
-    args.class_count = 4
+    args.input_features = 8710
+    args.class_count = 70
 
     return train_data_list, val_data_list, test_data_list
 
