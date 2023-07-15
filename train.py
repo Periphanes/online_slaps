@@ -69,6 +69,8 @@ elif args.dataset == "cora":
         args.trainer = "cora_features"
     elif args.input_type == "sampling":
         args.trainer = "cora_sampling"
+    elif args.input_type == "slaps":
+        args.trainer = "cora_slaps"
 elif args.dataset == "emaileucore":
     if args.input_type == "features":
         args.trainer = "email_features"
@@ -79,7 +81,7 @@ else:
 
 train_loader, val_loader, test_loader = get_data_loader(args)
 
-test_mlp = MLP_GRAPH_GEN(args, glob_var.train_data_list)
+# test_mlp = MLP_GRAPH_GEN(args, glob_var.train_data_list)
 
 model = get_model(args)
 model = model(args).to(device)
@@ -113,8 +115,8 @@ for epoch in range(1, args.epochs+1):
 
     training_loss = []
 
-    input_1 = ["facebookpagepage_features"]
-    input_2 = ["facebookpagepage_sampling"]
+    input_1 = ["facebookpagepage_features", "cora_features"]
+    input_2 = ["facebookpagepage_sampling", "cora_sampling"]
     input_3 = []
 
     for train_batch in tqdm(train_loader):
@@ -170,8 +172,8 @@ for epoch in range(1, args.epochs+1):
         pred_batches = []
         true_batches = []
 
-        input_1 = ["facebookpagepage_features"]
-        input_2 = ["facebookpagepage_sampling"]
+        input_1 = ["facebookpagepage_features", "cora_features"]
+        input_2 = ["facebookpagepage_sampling", "cora_sampling"]
         input_3 = []
 
         with torch.no_grad():
