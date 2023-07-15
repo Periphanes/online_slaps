@@ -27,15 +27,19 @@ def get_data_loader(args):
         train_data      = basic_Dataset(args, data=glob_var.train_data_list, data_type="training dataset")
         val_data        = basic_Dataset(args, data=glob_var.val_data_list, data_type="validation dataset")
         test_data       = basic_Dataset(args, data=glob_var.test_data_list, data_type="testing dataset")
-    if args.trainer == "facebookpagepage_features":
+    if "features" in args.trainer:
         train_data      = facebook_pagepage_training_Dataset(args, data=glob_var.train_data_list, data_type="training dataset")
         val_data        = facebook_pagepage_training_Dataset(args, data=glob_var.val_data_list, data_type="validation dataset")
         test_data       = facebook_pagepage_training_Dataset(args, data=glob_var.test_data_list, data_type="testing dataset")
-    if args.trainer == "facebookpagepage_sampling":
+    if "sampling" in args.trainer:
         train_data      = facebook_pagepage_sampling_Dataset(args, data=glob_var.train_data_list, data_type="training dataset")
         val_data        = facebook_pagepage_sampling_test_Dataset(args, data=glob_var.val_data_list, data_type="validation dataset")
         test_data = []
-    
+    if args.trainer == "cora_slaps":
+        train_data      = basic_features_Dataset(args, data=glob_var.train_data_list, data_type="training dataset")
+        val_data        = basic_features_Dataset(args, data=glob_var.val_data_list, data_type="validation dataset")
+        test_data       = basic_features_Dataset(args, data=glob_var.test_data_list, data_type="testing dataset")
+
     print("Total of {} data points intialized in Training Dataset...".format(train_data.__len__()))
     print("Total of {} data points intialized in Validation Dataset...".format(val_data.__len__()))
     print("Total of {} data points intialized in Testing Dataset...".format(test_data.__len__()))
@@ -44,11 +48,11 @@ def get_data_loader(args):
         train_loader    = DataLoader(train_data, batch_size=args.batch_size, drop_last=True, collate_fn=collate_basic)
         val_loader      = DataLoader(val_data, batch_size=args.batch_size, drop_last=True, collate_fn=collate_basic)
         test_loader     = DataLoader(test_data, batch_size=args.batch_size, drop_last=True, collate_fn=collate_basic)
-    elif args.trainer == "facebookpagepage_features":
+    elif "features" in args.trainer:
         train_loader    = DataLoader(train_data, batch_size=args.batch_size, drop_last=True, collate_fn=collate_fbpp_train_random)
         val_loader      = DataLoader(val_data, batch_size=args.batch_size, drop_last=True, collate_fn=collate_fbpp_train_random)
         test_loader     = DataLoader(test_data, batch_size=args.batch_size, drop_last=True, collate_fn=collate_fbpp_train_random)
-    elif args.trainer == "facebookpagepage_sampling":
+    elif "sampling" in args.trainer:
         train_loader    = DataLoader(train_data, batch_size=args.batch_size, drop_last=True, collate_fn=collate_fbpp_train_sampling)
         val_loader      = DataLoader(val_data, batch_size=args.batch_size, drop_last=True, collate_fn=collate_fbpp_test_sampling)
         test_loader     = None

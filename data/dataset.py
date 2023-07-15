@@ -47,3 +47,14 @@ class facebook_pagepage_sampling_test_Dataset(torch.utils.data.Dataset):
     
     def __getitem__(self, index):
         return (self._data_list[0][index, :], self._data_list[1][index])
+
+class basic_features_Dataset(torch.utils.data.Dataset):
+    def __init__(self, args, data, data_type="dataset"):
+        self._data_list = data
+        print(data[0][0][:500])
+    
+    def __len__(self):
+        return self._data_list[1].shape[0]
+    
+    def __getitem__(self, index):
+        return (self)
