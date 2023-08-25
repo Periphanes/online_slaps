@@ -36,3 +36,22 @@ else:
 print("Device Used : ", device)
 args.device = device
 
+if args.dataset == "credit_fraud":
+    if args.train_type == "features":
+        args.trainer = "credit_features"
+    elif args.train_type == "relational":
+        args.trainer = "credit_relational"
+    else:
+        raise NotImplementedError("Trainer type for Credit Fraud not Defined")
+
+elif args.dataset == "ticket_cancel":
+    if args.train_type == "features":
+        args.trainer = "ticket_features"
+    elif args.train_type == "relational":
+        args.trainer = "ticket_relational"
+    else:
+        raise NotImplementedError("Trainer type for Ticket Cancel not Defined")
+
+else:
+    raise NotImplementedError("Dataset not defined yet")
+
