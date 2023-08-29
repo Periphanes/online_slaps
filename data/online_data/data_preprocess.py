@@ -3,6 +3,8 @@ from torch.utils.data import DataLoader
 import pickle
 import glob_var
 
+from data.online_data.dataset import *
+
 def get_data_loader(args):
     print("Initializing Data Loader and Datasets")
 
@@ -17,12 +19,30 @@ def get_data_loader(args):
             X, y = pickle.load(handle)
     
     data_len = y.shape[0]
-    static_len = int(data_len * 0.8)
 
-    static_X = X[:static_len]
-    online_X = X[static_len:]
+    train_len = int(data_len * 0.6)
+    test_len = int(data_len * 0.8)
 
-    static_y = y[:static_len]
-    online_y = y[static_len:]
+    train_X = X[:train_len]
+    val_X = X[train_len:test_len]
+    test_X = X[test_len:]
 
+    train_y = y[:train_len]
+    val_y = y[train_len:test_len]
+    test_y = y[test_len:]
+
+    if args.trainer == "ticket_features":
+        train_data      = feature_Dataset(args, train_X, train_y, data_type="train dataset")
+        val_data        = feature_Dataset(args, val_X, val_y, data_type="validation dataset")
+        test_data       = feature_Dataset(args, test_X, test_y, data_type="test dataset")
     
+    print("Total of {} data points intialized in Train Dataset...".format(train_data.__len__()))
+    print("Total of {} data points intialized in Validation Dataset...".format(val_data.__len__()))
+    print("Total of {} data points intialized in Test Dataset...".format(test_data.__len__()))
+
+    if args.trainer == "ticket_features":
+        train_loader    = DataLoader(train_data, batch_size=args.batch_size, shuffle=False)
+        val_loader      = DataLoader(val_data, batch_size=args.batch_size, shuffle=False)
+        test_loader     = DataLoader(test_data, batch_size=args.batch_size, shuffle=False)
+    
+    return train_loader, val_loader, test_loader

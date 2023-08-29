@@ -11,6 +11,7 @@ from tqdm import tqdm
 
 from control.config import args
 from models import get_model
+from data.online_data.data_preprocess import get_data_loader
 
 import glob_var
 
@@ -55,3 +56,12 @@ elif args.dataset == "ticket_cancel":
 else:
     raise NotImplementedError("Dataset not defined yet")
 
+train_loader, val_loader, test_loader = get_data_loader(args)
+
+model = get_model(args)
+model = model(args).to(device)
+
+pytorch_total_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
+print("Model Parameter Count :", pytorch_total_params)
+
+criterion = nn.BCELoss()
