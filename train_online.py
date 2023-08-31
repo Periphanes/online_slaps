@@ -65,4 +65,19 @@ pytorch_total_params = sum(p.numel() for p in model.parameters() if p.requires_g
 print("Model Parameter Count :", pytorch_total_params)
 
 criterion = nn.BCELoss()
+optimizer = optim.Adam(model.parameters(), lr=args.lr_init)
+
+iter_num_per_epoch = len(train_loader)
+iter_num_total = args.epochs * iter_num_per_epoch
+
+print("# of Iterations (per epoch): ",  iter_num_per_epoch)
+print("# of Iterations (total): ",      iter_num_total)
+
+scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=10, gamma=1)
+
+iteration = 0
+
+pbar = tqdm(total=args.epochs, initial=0, bar_format="{desc:<5}{percentage:3.0f}%|{bar:10}{r_bar}")
+
+model.train()
 

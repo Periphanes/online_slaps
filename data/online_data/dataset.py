@@ -24,7 +24,7 @@ class relational_staticTrain_Dataset(Dataset):
 
         self._edges = silent_naive_knn_gen(args, args.knn_k, self._X_list, self._y_list, test_gen=True)
 
-        print(self._edges.shape)
+        # print(self._edges.shape)
     
     def __len__(self):
         return self.args.relational_train_length
