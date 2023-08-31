@@ -9,14 +9,20 @@ def get_data_loader(args):
     print("Initializing Data Loader and Datasets")
 
     if args.dataset == "ticket_cancel":
-        pickle_dir = '../../datasets/ticket_cancel/ticket_preprocessed.pickle'
+        pickle_dir = 'datasets/ticket_cancel/ticket_preprocessed.pickle'
         with open(pickle_dir, 'rb') as handle:
             X, y = pickle.load(handle)
         
-    elif args.dataset == "credit fraud":
-        pickle_dir = '../../datasets/credit_fraud/credit_preprocessed.pickle'
+        args.input_features = 17
+        args.class_count = 1
+        
+    elif args.dataset == "credit_fraud":
+        pickle_dir = 'datasets/credit_fraud/credit_preprocessed.pickle'
         with open(pickle_dir, 'rb') as handle:
             X, y = pickle.load(handle)
+        
+        args.input_features = 29
+        args.class_count = 1
     
     data_len = y.shape[0]
 
@@ -37,7 +43,9 @@ def get_data_loader(args):
         test_data       = feature_Dataset(args, test_X, test_y, data_type="test dataset")
     
     if args.trainer == "ticket_relational":
-        train_data = 0
+        train_data      = relational_staticTrain_Dataset(args, train_X, train_y, data_type="train dataset")
+        val_data        = relational_staticTrain_Dataset(args, val_X, val_y, data_type="validation dataset")
+        test_data       = relational_staticTrain_Dataset(args, test_X, test_y, data_type="test dataset")
     
     print("Total of {} data points intialized in Train Dataset...".format(train_data.__len__()))
     print("Total of {} data points intialized in Validation Dataset...".format(val_data.__len__()))
@@ -47,5 +55,9 @@ def get_data_loader(args):
         train_loader    = DataLoader(train_data, batch_size=args.batch_size, shuffle=False)
         val_loader      = DataLoader(val_data, batch_size=args.batch_size, shuffle=False)
         test_loader     = DataLoader(test_data, batch_size=args.batch_size, shuffle=False)
+    if args.trainer == "ticket_relational":
+        train_loader    = DataLoader(train_data, batch_size=args.batch_size, shuffle=False)
+        val_loader      = DataLoader(val_data, batch_size=1, shuffle=False)
+        test_loader     = DataLoader(test_data, batch_size=1, shuffle=False)
     
     return train_loader, val_loader, test_loader
