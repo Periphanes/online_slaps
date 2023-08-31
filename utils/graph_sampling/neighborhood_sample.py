@@ -67,7 +67,7 @@ def neighborhood_sample_single(args, node_index, nodes, edges, labels, masked=Tr
 
     outliers = [node_index]
     
-    for graph_layer in range(graph_sample_layers):
+    for _ in range(graph_sample_layers):
         new_outliers = []
         
         for outlier in outliers:

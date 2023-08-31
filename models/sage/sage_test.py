@@ -38,6 +38,7 @@ class SAGE_TEST(nn.Module):
         self.args = args
         self.relu = nn.ReLU()
         self.softmax = nn.Softmax()
+        self.sigmoid = nn.Sigmoid()
 
         self.lin1 = nn.Linear(self.input_feature_count, 64, bias=True)
         self.bn = nn.BatchNorm1d(64)
@@ -56,4 +57,9 @@ class SAGE_TEST(nn.Module):
 
         out = self.lin2(self.relu(self.bn(self.lin1(out))))
 
-        return self.softmax(out)
+
+        # Set class count for binary case to just 1 instead of 2
+        if self.args.class_count == 1:
+            return self.sigmoid(out)
+        else:
+            return self.softmax(out)
