@@ -65,3 +65,4 @@ pytorch_total_params = sum(p.numel() for p in model.parameters() if p.requires_g
 print("Model Parameter Count :", pytorch_total_params)
 
 criterion = nn.BCELoss()
+

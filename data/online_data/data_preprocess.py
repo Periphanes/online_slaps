@@ -36,6 +36,9 @@ def get_data_loader(args):
         val_data        = feature_Dataset(args, val_X, val_y, data_type="validation dataset")
         test_data       = feature_Dataset(args, test_X, test_y, data_type="test dataset")
     
+    if args.trainer == "ticket_relational":
+        train_data = 0
+    
     print("Total of {} data points intialized in Train Dataset...".format(train_data.__len__()))
     print("Total of {} data points intialized in Validation Dataset...".format(val_data.__len__()))
     print("Total of {} data points intialized in Test Dataset...".format(test_data.__len__()))
