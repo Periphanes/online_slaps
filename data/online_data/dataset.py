@@ -33,7 +33,7 @@ class relational_staticTrain_Dataset(Dataset):
         return self._X_list.shape[0]
     
     def __getitem__(self, index):
-        node_id = random.randint(0, self.data_len - 1)
-        ret_nodes, ret_edges = neighborhood_sample_single(self.args, node_id, self._X_list, self._edges, self._y_list, maksed=False)
+        node_id = random.randint(0, self.data_len() - 1)
+        ret_nodes, ret_edges = neighborhood_sample_single(self.args, node_id, self._X_list, self._edges, self._y_list, masked=False)
 
         return ret_nodes, ret_edges
