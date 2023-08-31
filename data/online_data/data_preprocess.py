@@ -47,9 +47,9 @@ def get_data_loader(args):
         val_data        = relational_staticTrain_Dataset(args, val_X, val_y, data_type="validation dataset")
         test_data       = relational_staticTrain_Dataset(args, test_X, test_y, data_type="test dataset")
     
-    print("Total of {} data points intialized in Train Dataset...".format(train_data.__len__()))
-    print("Total of {} data points intialized in Validation Dataset...".format(val_data.__len__()))
-    print("Total of {} data points intialized in Test Dataset...".format(test_data.__len__()))
+    # print("Total of {} data points intialized in Train Dataset...".format(train_data.__len__()))
+    # print("Total of {} data points intialized in Validation Dataset...".format(val_data.__len__()))
+    # print("Total of {} data points intialized in Test Dataset...".format(test_data.__len__()))
 
     if args.trainer == "ticket_features":
         train_loader    = DataLoader(train_data, batch_size=args.batch_size, shuffle=False)

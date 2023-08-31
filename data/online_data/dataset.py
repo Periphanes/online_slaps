@@ -1,5 +1,5 @@
 from torch.utils.data import Dataset
-from utils.knn_graph.naive_knn import naive_knn_gen
+from utils.knn_graph.naive_knn import silent_naive_knn_gen, naive_knn_gen
 from utils.graph_sampling.neighborhood_sample import neighborhood_sample_single
 
 import torch
@@ -22,7 +22,7 @@ class relational_staticTrain_Dataset(Dataset):
         self._y_list = torch.tensor(y)
         self.args = args
 
-        self._edges = naive_knn_gen(args, args.knn_k, self._X_list, self._y_list, test_gen=True)
+        self._edges = silent_naive_knn_gen(args, args.knn_k, self._X_list, self._y_list, test_gen=True)
 
         print(self._edges.shape)
     
