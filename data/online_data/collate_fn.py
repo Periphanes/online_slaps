@@ -24,12 +24,17 @@ def collate_relational_redun_train(train_data):
     k = args.knn_k
     layers = args.graph_sample_layers
 
-    batched = [[] for _ in range(layers)]
+    y_batch = []
 
-    for data_point in train_data:
-        for ind, data in data_point:
+    batched = [[] for _ in range(layers + 1)]
+
+    for data_point, y in train_data:
+        for ind, data in enumerate(data_point):
             batched[ind].append(data)
-    
+        
+        y_batch.append(y)
+
+    y_batch = torch.stack(y_batch)
     batched = [torch.stack(x) for x in batched]
 
-    return batched
+    return batched, y_batch
