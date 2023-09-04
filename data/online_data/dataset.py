@@ -44,4 +44,4 @@ class relational_staticTrain_Dataset(Dataset):
         node_id = random.randint(0, self.data_len() - 1)
         ret_arr = neighborhood_sample_redun_single(self.args, node_id, self._X_list, self._edges)
 
-        return ret_arr
+        return ret_arr, self._y_list[index]

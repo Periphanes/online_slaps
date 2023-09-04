@@ -81,3 +81,21 @@ pbar = tqdm(total=args.epochs, initial=0, bar_format="{desc:<5}{percentage:3.0f}
 
 model.train()
 
+for batch in train_loader:
+    batched, y = batch
+    features = [x.to(device) for x in batched]
+    y = y.to(device)
+
+    optimizer.zero_grad()
+
+    output = model(features)
+
+    exit(0)
+
+    # output = model((nodes, edges))
+
+    # loss = criterion(output, y)
+    nn.utils.clip_grad_norm_(model.parameters(), 5)
+
+    optimizer.step()
+    scheduler.step()

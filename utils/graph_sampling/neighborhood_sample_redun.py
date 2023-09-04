@@ -4,7 +4,7 @@ import numpy as np
 def neighborhood_sample_redun_single(args, node_index, nodes, edges):
     graph_sample_layers = args.graph_sample_layers
 
-    ret_arr = []
+    ret_arr = [nodes[node_index]]
 
     outliers = [node_index]
 
