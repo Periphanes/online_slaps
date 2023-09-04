@@ -4,6 +4,7 @@ import pickle
 import glob_var
 
 from data.online_data.dataset import *
+from data.online_data.collate_fn import *
 
 def get_data_loader(args):
     print("Initializing Data Loader and Datasets")
@@ -56,7 +57,7 @@ def get_data_loader(args):
         val_loader      = DataLoader(val_data, batch_size=args.batch_size, shuffle=False)
         test_loader     = DataLoader(test_data, batch_size=args.batch_size, shuffle=False)
     if args.trainer == "ticket_relational":
-        train_loader    = DataLoader(train_data, batch_size=args.batch_size, shuffle=False)
+        train_loader    = DataLoader(train_data, batch_size=args.batch_size, shuffle=False, collate_fn=collate_relational_train)
         val_loader      = DataLoader(val_data, batch_size=1, shuffle=False)
         test_loader     = DataLoader(test_data, batch_size=1, shuffle=False)
     
