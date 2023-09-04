@@ -1,4 +1,5 @@
 import torch
+from control.config import args
 
 def collate_relational_train(train_data):
     node_batch = []
@@ -18,3 +19,17 @@ def collate_relational_train(train_data):
     y_batch = torch.stack(y_batch)
 
     return node_batch, edge_batch, y_batch
+
+def collate_relational_redun_train(train_data):
+    k = args.knn_k
+    layers = args.graph_sample_layers
+
+    batched = [[] for _ in range(layers)]
+
+    for data_point in train_data:
+        for ind, data in data_point:
+            batched[ind].append(data)
+    
+    batched = [torch.stack(x) for x in batched]
+
+    return batched
