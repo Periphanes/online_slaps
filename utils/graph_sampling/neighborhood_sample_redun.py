@@ -21,6 +21,14 @@ def neighborhood_sample_redun_single(args, node_index, nodes, edges):
                 new_outliers.append(edge_ind)
         
         outliers = new_outliers
-        ret_arr.append(torch.stack(feature_agg))
+        feat_agg_tensor = torch.stack(feature_agg)
+
+        # print("\nNAN/INF")
+        # print(torch.count_nonzero(torch.isnan(feat_agg_tensor)))
+        # print(torch.count_nonzero(torch.isinf(feat_agg_tensor)))
+
+        feat_agg_tensor = torch.nan_to_num(feat_agg_tensor)
+
+        ret_arr.append(feat_agg_tensor)
 
     return ret_arr
