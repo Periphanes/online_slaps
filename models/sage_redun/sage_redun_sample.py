@@ -37,11 +37,13 @@ class SAGE_REDUN_SAMPLE(nn.Module):
 
         self.lin1 = nn.Linear(self.input_count, 8, bias=True)
         self.bn = nn.BatchNorm1d(8)
+        # self.bn = nn.Linear(8, 8)
         self.lin2 = nn.Linear(8, args.class_count)
 
         self.sigmoid = nn.Sigmoid()
 
     def forward(self, x):
+
         for i in range(self.layer_count, 0, -1):
 
             if i != 1:
@@ -51,7 +53,6 @@ class SAGE_REDUN_SAMPLE(nn.Module):
                 concat = torch.concat((torch.squeeze(aggregate_mean(x[i], self.k, i)), x[i-1]), dim=1)
                 x[i-1] = self.relu(self.intralayer_weights[i-1](concat))
 
-        
         out = self.lin2(self.bn(self.lin1(x[0])))
 
         return self.sigmoid(out)

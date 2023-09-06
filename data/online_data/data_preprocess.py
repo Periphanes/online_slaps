@@ -1,10 +1,12 @@
 from torch.utils.data import DataLoader
 
 import pickle
-import glob_var
+import numpy as np
 
 from data.online_data.dataset import *
 from data.online_data.collate_fn import *
+
+from sklearn.preprocessing import StandardScaler
 
 def get_data_loader(args):
     print("Initializing Data Loader and Datasets")
@@ -38,6 +40,17 @@ def get_data_loader(args):
     val_y = y[train_len:test_len]
     test_y = y[test_len:]
 
+    train_X = np.nan_to_num(train_X)
+    val_X = np.nan_to_num(val_X)
+    test_X = np.nan_to_num(test_X)
+
+    std = StandardScaler()
+    std.fit(train_X)
+
+    train_X = std.transform(train_X)
+    val_X = std.transform(val_X)
+    test_X = std.transform(test_X)
+
     if args.trainer == "ticket_features":
         train_data      = feature_Dataset(args, train_X, train_y, data_type="train dataset")
         val_data        = feature_Dataset(args, val_X, val_y, data_type="validation dataset")
@@ -57,7 +70,7 @@ def get_data_loader(args):
         val_loader      = DataLoader(val_data, batch_size=args.batch_size, shuffle=False)
         test_loader     = DataLoader(test_data, batch_size=args.batch_size, shuffle=False)
     if args.trainer == "ticket_relational":
-        train_loader    = DataLoader(train_data, batch_size=args.batch_size, shuffle=False, collate_fn=collate_relational_redun_train)
+        train_loader    = DataLoader(train_data, batch_size=args.batch_size, shuffle=False, drop_last=True, collate_fn=collate_relational_redun_train)
         val_loader      = DataLoader(val_data, batch_size=1, shuffle=False)
         test_loader     = DataLoader(test_data, batch_size=1, shuffle=False)
     
