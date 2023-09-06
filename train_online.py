@@ -77,25 +77,22 @@ scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=10, gamma=1)
 
 iteration = 0
 
-pbar = tqdm(total=args.epochs, initial=0, bar_format="{desc:<5}{percentage:3.0f}%|{bar:10}{r_bar}")
+# pbar = tqdm(total=args.epochs, initial=0, bar_format="{desc:<5}{percentage:3.0f}%|{bar:10}{r_bar}")
 
 model.train()
 
-for batch in train_loader:
+for batch in tqdm(train_loader):
     batched, y = batch
     features = [x.to(device) for x in batched]
-    y = y.to(device)
+    y = y.type(torch.FloatTensor).to(device)
 
     optimizer.zero_grad()
 
     output = model(features)
+    loss = criterion(output.squeeze(), y)
 
-    exit(0)
-
-    # output = model((nodes, edges))
-
-    # loss = criterion(output, y)
     nn.utils.clip_grad_norm_(model.parameters(), 5)
 
     optimizer.step()
     scheduler.step()
+    
