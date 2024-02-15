@@ -15,7 +15,7 @@ parser.add_argument('--train-type', type=str, default="features")
 parser.add_argument('--epochs', type=int, default=100)
 parser.add_argument('--batch-size', type=int, default=16)
 parser.add_argument('--model', type=str, default="baseline_mlp")
-parser.add_argument('--lr_init', type=float, default=1e-4)
+parser.add_argument('--lr_init', type=float, default=1e-2)
 parser.add_argument('--val-epoch', type=int, default=10)
 parser.add_argument('--input-type', type=str, choices=["features", "sampling", "slaps"], default="features")
 

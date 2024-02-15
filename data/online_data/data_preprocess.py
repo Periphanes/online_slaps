@@ -56,20 +56,20 @@ def get_data_loader(args):
         val_data        = feature_Dataset(args, val_X, val_y, data_type="validation dataset")
         test_data       = feature_Dataset(args, test_X, test_y, data_type="test dataset")
     
-    if args.trainer == "ticket_relational":
+    if args.trainer == "ticket_relational" or args.trainer == "credit_relational":
         train_data      = relational_staticTrain_Dataset(args, train_X, train_y, data_type="train dataset")
         val_data        = relational_staticTrain_Dataset(args, val_X, val_y, data_type="validation dataset")
         test_data       = relational_staticTrain_Dataset(args, test_X, test_y, data_type="test dataset")
     
-    # print("Total of {} data points intialized in Train Dataset...".format(train_data.__len__()))
-    # print("Total of {} data points intialized in Validation Dataset...".format(val_data.__len__()))
-    # print("Total of {} data points intialized in Test Dataset...".format(test_data.__len__()))
+    # print("Total of {} data points intialized in Train Dataset...".format(train_data.__datalen__()))
+    # print("Total of {} data points intialized in Validation Dataset...".format(val_data.__datalen__()))
+    # print("Total of {} data points intialized in Test Dataset...".format(test_data.__datalen__()))
 
     if args.trainer == "ticket_features":
         train_loader    = DataLoader(train_data, batch_size=args.batch_size, shuffle=False)
         val_loader      = DataLoader(val_data, batch_size=args.batch_size, shuffle=False)
         test_loader     = DataLoader(test_data, batch_size=args.batch_size, shuffle=False)
-    if args.trainer == "ticket_relational":
+    if args.trainer == "ticket_relational" or args.trainer == "credit_relational":
         train_loader    = DataLoader(train_data, batch_size=args.batch_size, shuffle=False, drop_last=True, collate_fn=collate_relational_redun_train)
         val_loader      = DataLoader(val_data, batch_size=1, shuffle=False)
         test_loader     = DataLoader(test_data, batch_size=1, shuffle=False)

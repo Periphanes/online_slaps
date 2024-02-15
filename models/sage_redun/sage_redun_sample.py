@@ -40,6 +40,8 @@ class SAGE_REDUN_SAMPLE(nn.Module):
         # self.bn = nn.Linear(8, 8)
         self.lin2 = nn.Linear(8, args.class_count)
 
+        
+
         self.sigmoid = nn.Sigmoid()
 
     def forward(self, x):

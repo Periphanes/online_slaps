@@ -13,6 +13,8 @@ from control.config import args
 from models import get_model
 from data.online_data.data_preprocess import get_data_loader
 
+import matplotlib.pyplot as plt
+
 import glob_var
 
 from sklearn.metrics import classification_report
@@ -81,18 +83,30 @@ iteration = 0
 
 model.train()
 
-for batch in tqdm(train_loader):
-    batched, y = batch
-    features = [x.to(device) for x in batched]
-    y = y.type(torch.FloatTensor).to(device)
+epoch_losses = []
 
-    optimizer.zero_grad()
+for _ in tqdm(range(1, args.epochs + 1)):
+    training_loss = []
 
-    output = model(features)
-    loss = criterion(output.squeeze(), y)
+    for idx, batch in enumerate(train_loader):
+        batched, y = batch
+        features = [x.to(device) for x in batched]
+        y = y.type(torch.FloatTensor).to(device)
 
-    nn.utils.clip_grad_norm_(model.parameters(), 5)
+        optimizer.zero_grad()
 
-    optimizer.step()
-    scheduler.step()
+        output = model(features)
+        loss = criterion(output.squeeze(), y)
+
+        nn.utils.clip_grad_norm_(model.parameters(), 5)
+
+        optimizer.step()
+        scheduler.step()
+
+        training_loss.append(loss.item())
     
+    epoch_loss = sum(training_loss) / len(training_loss)
+    epoch_losses.append(epoch_loss)
+
+plt.plot(epoch_losses)
+plt.show()

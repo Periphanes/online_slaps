@@ -24,7 +24,8 @@ class relational_staticTrain_Dataset(Dataset):
         self._y_list = torch.tensor(y)
         self.args = args
 
-        self._edges = silent_naive_knn_gen(args, args.knn_k, self._X_list, self._y_list, test_gen=True)
+        if args.graph_sample_layers != 0:
+            self._edges = naive_knn_gen(args, args.knn_k, self._X_list, self._y_list, test_gen=True)
 
         # print(self._edges.shape)
     
@@ -42,6 +43,9 @@ class relational_staticTrain_Dataset(Dataset):
 
     def __getitem__(self, index):
         node_id = random.randint(0, self.data_len() - 1)
-        ret_arr = neighborhood_sample_redun_single(self.args, node_id, self._X_list, self._edges)
+        if self.args.graph_sample_layers != 0:
+            ret_arr = neighborhood_sample_redun_single(self.args, node_id, self._X_list, self._edges)
+        else:
+            ret_arr = [self._X_list[node_id]]
 
         return ret_arr, self._y_list[index]
